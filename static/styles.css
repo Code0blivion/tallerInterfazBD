@@ -1,0 +1,26 @@
+body {
+  display: grid;
+  place-items: center;
+  min-height: 100vh;
+}
+
+#formulario-candidatos > h1 {
+  margin: 0 auto 30px;
+}
+
+#formulario-candidatos {
+  max-width: 500px;
+}
+
+input,
+select {
+  text-align: center;
+}
+
+.modal-header {
+  text-align: left;
+}
+
+#cand-reg-table {
+  width: 60%;
+}

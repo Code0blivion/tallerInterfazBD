@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Registro de Candidatos</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="styles.css">
+</head>
+</head>
+
+<body class="container text-center text-bg-info">
+
+    <div id="formulario-candidatos" class="card text-bg-secondary p-3 container-sm text-center">
+        <h1>Registro de candidatos</h1>
+        <form action="" method="post">
+            <div class="mb-3">
+                <label for="usuario">Usuario</label><br>
+                <input type="email" id="usuario" name="usuario" class="form-control" required><br>
+            </div>
+
+            <div class="mb-3">
+                <label for="nombre">Nombre</label><br>
+                <input type="text" id="nombre" name="nombre" class="form-control" required><br>
+            </div>
+
+            <div class="mb-3">
+                <label for="apellido">Apellido</label><br>
+                <input type="text" id="apellido" name="apellido" class="form-control" required><br>
+            </div>
+
+            <div class="mb-3">
+                <label for="fecha">Fecha de Nacimiento</label><br>
+                <input type="date" id="fecha" name="fecha" class="form-control" required><br>
+            </div>
+
+            <div class="mb-3">
+                <label for="numDoc">Número de Documento</label><br>
+                <input type="number" id="numDoc" name="numDoc" class="form-control" required min="1000000"><br>
+            </div>
+
+            <div class="mb-3">
+                <label for="tipoDoc">Tipo de Documento</label><br>
+                <select name="tipoDoc" id="tipoDoc" class="form-select">
+                    <% for(let i=0; i < documentos.length; i++) { %>
+                        <option value="<%= documentos[i].idTipoDoc %>">
+                            <%= documentos[i].descTipoDoc %>
+                        </option>
+                        <% } %>
+                </select><br>
+            </div>
+
+            <button id="rgt-button" class="btn btn-primary">Registrar
+                Candidato</button>
+
+            <button id="back-button" class="btn btn-light">Regresar al Inicio</button>
+        </form>
+    </div>
+
+    <div class="modal fade" id="modal-conf" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Registro Exitoso</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>El candidato se ha registrado de manera exitosa</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modal-war" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Registro Fallido</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Ya existe un usuario registrado con el mismo:</p> <!--Agregar causales - información repetida-->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.js"
+        integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
+        </script>
+
+    <script>
+        document.getElementById('rgt-button').addEventListener('click', (e) => {
+
+            e.preventDefault();
+
+            $.post('/registroCandidatos',
+                {
+                    usuario: document.getElementById('usuario').value,
+                    nombre: document.getElementById('nombre').value,
+                    apellido: document.getElementById('apellido').value,
+                    fecha: document.getElementById('fecha').value,
+                    numDoc: document.getElementById('numDoc').value,
+                    tipoDoc: document.getElementById('tipoDoc').value
+                }, function (res) {
+
+                    if (res.flag1 === false && res.flag2 === false) {
+                        new bootstrap.Modal(document.getElementById("modal-conf")).show();
+                    } else {
+                        modal_body = document.querySelector("#modal-war .modal-body");
+                        if (res.flag1 === true) {
+                            causal1 = document.createElement('p');
+                            causal1.textContent = 'Nombre de usuario';
+                            modal_body.appendChild(causal1);
+                        }
+
+                        if (res.flag2 === true) {
+                            causal1 = document.createElement('p');
+                            causal1.textContent = 'Número y Tipo de Documento';
+                            modal_body.appendChild(causal1);
+                        }
+
+                        new bootstrap.Modal(document.getElementById("modal-war")).show();
+                    }
+                })
+        }
+        );
+
+        document.getElementById('back-button').addEventListener('click', (e) => {
+            e.preventDefault();
+            location.href = "/";
+        })
+
+        Array.from(document.getElementsByClassName('modal')).forEach(element => {
+            element.addEventListener('hidden.bs.modal', (e) => {
+                location.reload();
+            })
+        })
+
+    </script>
+
+</body>
+
+</html>

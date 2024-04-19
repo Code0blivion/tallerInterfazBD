@@ -1,0 +1,26 @@
+[
+    {
+        "idTipoDoc":"CC",
+        "descTipoDoc":"Cedula"
+    },
+    {
+        "idTipoDoc":"TI",
+        "descTipoDoc":"Tarjeta de identidad"
+    },
+    {
+        "idTipoDoc":"TE",
+        "descTipoDoc":"Tarjeta de Extranjería"
+    },
+    {
+        "idTipoDoc":"CE",
+        "descTipoDoc":"Cedula de extranjería"
+    },
+    {
+        "idTipoDoc":"NIT",
+        "descTipoDoc":"Nit"
+    },
+    {
+        "idTipoDoc":"PAS",
+        "descTipoDoc":"Pasaporte"
+    }
+]
