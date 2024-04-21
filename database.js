@@ -1,5 +1,27 @@
 const oracle = require("oracledb");
 
+function configuraciónLibreria() {
+  //Configuración libreria Oracle
+
+  let clientOpts = {};
+  if (process.platform === "win32") {
+    // Windows
+    // If you use backslashes in the libDir string, you will
+    // need to double them.
+    clientOpts = { libDir: "C:\\oracle\\instantclient_21_13" };
+  } else if (process.platform === "darwin" && process.arch === "x64") {
+    // macOS Intel
+    clientOpts = {
+      libDir: process.env.HOME + "/Downloads/instantclient_21_13",
+    };
+  }
+  // else on other platforms like Linux the system library search path MUST always be
+  // set before Node.js is started, for example with ldconfig or LD_LIBRARY_PATH.
+
+  // enable node-oracledb Thick mode
+  oracle.initOracleClient(clientOpts);
+}
+
 async function run() {
   try {
     let con = await oracle.getConnection({
@@ -90,6 +112,7 @@ async function createRecord(usuario, nombre, apellido, fecha, numDoc, tipoDoc) {
 }
 
 module.exports = {
+  configuraciónLibreria,
   getConexion,
   consultar,
   consultar2,

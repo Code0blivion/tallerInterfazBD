@@ -4,8 +4,8 @@ const path = require("path");
 const port = 3000;
 const bodyParser = require("body-parser");
 const fs = require("fs").promises;
-const oracle = require("oracledb");
 const {
+  configuraciónLibreria,
   getConexion,
   consultar,
   consultar2,
@@ -18,23 +18,7 @@ app.use(express.static("static"));
 
 app.set("view engine", "ejs");
 
-//Configuración libreria Oracle
-
-let clientOpts = {};
-if (process.platform === "win32") {
-  // Windows
-  // If you use backslashes in the libDir string, you will
-  // need to double them.
-  clientOpts = { libDir: "C:\\oracle\\instantclient_21_13" };
-} else if (process.platform === "darwin" && process.arch === "x64") {
-  // macOS Intel
-  clientOpts = { libDir: process.env.HOME + "/Downloads/instantclient_21_13" };
-}
-// else on other platforms like Linux the system library search path MUST always be
-// set before Node.js is started, for example with ldconfig or LD_LIBRARY_PATH.
-
-// enable node-oracledb Thick mode
-oracle.initOracleClient(clientOpts);
+configuraciónLibreria();
 
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname + "/index.html"));
@@ -107,24 +91,3 @@ app.get("/listaCandidatos", async (req, res) => {
 app.listen(port, () => {
   console.log(`Escuchando en puerto ${port}`);
 });
-
-async function writeJSON(ruta, info) {
-  let obj = await readJSON(ruta);
-  obj.push(info);
-
-  try {
-    await fs.writeFile(ruta, JSON.stringify(obj));
-  } catch (err) {
-    console.error(err);
-  }
-}
-
-async function readJSON(ruta) {
-  try {
-    let data = await fs.readFile(ruta, "utf8");
-    let obj = JSON.parse(data);
-    return obj;
-  } catch (err) {
-    console.error(err);
-  }
-}
