@@ -51,7 +51,7 @@ app.post("/registroCandidatos", async (req, res) => {
       }
 
       if (
-        candidatos[i][5] === req.body.numDoc &&
+        candidatos[i][5] === Number(req.body.numDoc) &&
         candidatos[i][1] === req.body.tipoDoc
       ) {
         flag2 = true;

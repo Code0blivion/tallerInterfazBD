@@ -65,7 +65,9 @@ async function consultar(con, tabla) {
 async function consultar2(con, tabla) {
   try {
     const result = await con.execute(
-      `SELECT usuario,idtipodoc_candidato,nombre,apellido,TO_CHAR(fechanac,'DAY "de" MONTH "de" YYYY'),ndoc FROM ${tabla}`
+      `SELECT usuario,tipodoc.desctipodoc,nombre,apellido,TO_CHAR(fechanac,'DAY "de" MONTH "de" YYYY'),ndoc
+      FROM ${tabla}
+      JOIN tipodoc ON candidato.idtipodoc_candidato = tipodoc.idtipodoc`
     );
     const rows = result.rows;
     console.log(result);

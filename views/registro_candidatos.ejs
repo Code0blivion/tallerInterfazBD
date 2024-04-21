@@ -96,26 +96,26 @@
     <script>
         document.getElementById('rgt-button').addEventListener('click', (e) => {
             e.preventDefault();
-        
+
             // Obtener valores de los campos
             const usuario = document.getElementById('usuario').value;
             const nombre = document.getElementById('nombre').value;
             const apellido = document.getElementById('apellido').value;
             const fecha = document.getElementById('fecha').value;
             const numDoc = document.getElementById('numDoc').value;
-        
+
             // Validar campos obligatorios
             if (!usuario || !nombre || !apellido || !fecha || !numDoc) {
                 alert('Por favor, complete todos los campos obligatorios.');
                 return; // Detener el proceso si hay campos vacíos
             }
-        
+
             // Validar formato de correo electrónico
             if (!isValidEmail(usuario)) {
                 alert('Ingrese un correo electrónico válido en el campo Usuario.');
                 return; // Detener el proceso si el correo electrónico no es válido
             }
-        
+
             // Todos los campos requeridos y el correo electrónico son válidos, proceder con la solicitud POST
             $.post('/registroCandidatos', {
                 usuario: usuario,
@@ -129,25 +129,23 @@
                     new bootstrap.Modal(document.getElementById("modal-conf")).show();
                 } else {
                     const modal_body = document.querySelector("#modal-war .modal-body");
-                    modal_body.innerHTML = ''; // Limpiar contenido anterior
-        
                     if (res.flag1 === true) {
                         const causal1 = document.createElement('p');
                         causal1.textContent = 'Nombre de usuario';
                         modal_body.appendChild(causal1);
                     }
-        
+
                     if (res.flag2 === true) {
                         const causal2 = document.createElement('p');
                         causal2.textContent = 'Número y Tipo de Documento';
                         modal_body.appendChild(causal2);
                     }
-        
+
                     new bootstrap.Modal(document.getElementById("modal-war")).show();
                 }
             });
         });
-        
+
         // Función para validar formato de correo electrónico
         function isValidEmail(email) {
             // Expresión regular para validar formato de correo electrónico
